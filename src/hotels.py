@@ -29,8 +29,6 @@ def get_hotels(
         if title and hotel["title"] != title:
             continue
         hotels_.append(hotel)
-
-    if pagination.page and pagination.per_page:
         return hotels_[pagination.per_page * (pagination.page-1):][:pagination.per_page]
     return hotels_
 
