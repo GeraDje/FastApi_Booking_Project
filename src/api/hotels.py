@@ -7,8 +7,18 @@ from src.schemas.hotels import Hotel, HotelPATCH
 
 router = APIRouter(prefix="/hotels", tags=["Отели"])
 
+@router.get("/{hotel_id}",
+            summary="Получение одного отеля")
+async def get_hotel(hotel_id: int):
+    async with async_session_maker() as session:
+        hotel = await HotelsRepository(session).get_one_or_none(id=hotel_id)
+        if hotel is None:
+            return ("Такого отеля нет")
+        return hotel
 
-@router.get("")
+
+@router.get("",
+            summary="Получение данных об отеле")
 async def get_hotels(
         pagination: PaginationDep,
         location: str | None = Query(None, description="Локация"),
@@ -24,7 +34,8 @@ async def get_hotels(
         )
 
 
-@router.post("")
+@router.post("",
+             summary="Добавление  отелей")
 async def create_hotel(hotel_data: Hotel = Body(openapi_examples={
     "1": {
         "summary": "Сочи",
@@ -48,7 +59,8 @@ async def create_hotel(hotel_data: Hotel = Body(openapi_examples={
     return {"status": "OK", "data": hotel}
 
 
-@router.put("/{hotel_id}")
+@router.put("/{hotel_id}",
+            summary="Полное обновление данных об отеле")
 async def edit_hotel(hotel_id: int, hotel_data: Hotel):
     async with async_session_maker() as session:
         await HotelsRepository(session).edit(hotel_data, id=hotel_id)
@@ -61,16 +73,13 @@ async def edit_hotel(hotel_id: int, hotel_data: Hotel):
     summary="Частичное обновление данных об отеле",
     description="<h1>Тут мы частично обновляем данные об отеле: можно отправить name, а можно title</h1>",
 )
-def partially_edit_hotel(
+async def partially_edit_hotel(
         hotel_id: int,
         hotel_data: HotelPATCH,
 ):
-    global hotels
-    hotel = [hotel for hotel in hotels if hotel["id"] == hotel_id][0]
-    if hotel_data.title:
-        hotel["title"] = hotel_data.title
-    if hotel_data.name:
-        hotel["name"] = hotel_data.name
+    async with async_session_maker as session:
+        await HotelsRepository.edit(hotel_data,exclude_unset=True,id=hotel_id)
+        await session.commit()
     return {"status": "OK"}
 
 
