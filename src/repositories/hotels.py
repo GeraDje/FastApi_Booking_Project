@@ -5,6 +5,7 @@ from sqlalchemy import select, func
 
 class HotelsRepository(BaseRepository):
     model = HotelsOrm
+    schema = Hotel
 
     async def get_all(
             self,
