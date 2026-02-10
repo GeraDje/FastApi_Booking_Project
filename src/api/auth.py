@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from passlib.context import CryptContext
 from src.database import async_session_maker
+from src.models.users import UsersOrm
 from src.repositories.users import UsersRepository
 from src.schemas.users import UserRequestAdd, UserAdd
 
