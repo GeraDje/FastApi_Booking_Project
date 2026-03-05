@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
+    REDIS_HOST: str
+    REDIS_PORT: int
+
     model_config = SettingsConfigDict(
         # pathlib позволяет формировать путь
         # с помощью оператора "/", аналогично os.path.join()
