@@ -10,7 +10,6 @@ from fastapi_cache.backends.redis import RedisBackend
 import sys
 from pathlib import Path
 
-from src.init import redis_manager
 
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -19,6 +18,8 @@ from src.api.rooms import router as router_rooms
 from src.api.auth import router as router_auth
 from src.api.bookings import router as router_bookings
 from src.api.facilities import router as router_facilities
+from src.api.images import router as router_images
+from src.init import redis_manager
 
 
 @asynccontextmanager
@@ -38,6 +39,7 @@ app.include_router(router_hotels)
 app.include_router(router_rooms)
 app.include_router(router_facilities)
 app.include_router(router_bookings)
+app.include_router(router_images)
 
 
 @app.get("/docs", include_in_schema=False)
