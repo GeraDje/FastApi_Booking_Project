@@ -4,3 +4,4 @@ venv/
 env/
 .idea
 .env
+celerybeat-schedule.db
