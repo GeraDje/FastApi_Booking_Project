@@ -20,7 +20,6 @@ async def test_add_crud(db):
     assert booking.id == new_booking.id
     assert booking.room_id == new_booking.room_id
     assert booking.user_id == new_booking.user_id
-    # а еще можно вот так разом сравнить все параметры
     assert booking.model_dump(exclude={"id"}) == booking_data.model_dump()
 
     # обновить бронь
@@ -37,8 +36,6 @@ async def test_add_crud(db):
     assert updated_booking
     assert updated_booking.id == new_booking.id
     assert updated_booking.date_to == update_data
-
-    # удалить бронь
 
     # удалить бронь
     await db.bookings.delete(id=new_booking.id)
