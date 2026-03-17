@@ -2,6 +2,7 @@ from fastapi import APIRouter, Body
 from src.api.dependencies import DBDep
 from src.schemas.facilities import FacilityAdd
 from fastapi_cache.decorator import cache
+
 router = APIRouter(prefix="/facilities", tags=["Удобства"])
 
 

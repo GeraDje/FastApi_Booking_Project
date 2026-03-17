@@ -10,7 +10,7 @@ async def test_create_facili(ac):
         "/facilities",
         json={
             "title": facilities_title,
-        }
+        },
     )
     assert responce.status_code == 200
     res = responce.json()

@@ -18,9 +18,9 @@ async def get_my_bookings(user_id: UserIdDep, db: DBDep):
 
 @router.post("")
 async def add_booking(
-        user_id: UserIdDep,
-        db: DBDep,
-        booking_data: BookingAddRequest,
+    user_id: UserIdDep,
+    db: DBDep,
+    booking_data: BookingAddRequest,
 ):
     room = await db.rooms.get_one_or_none(id=booking_data.room_id)
     hotel = await db.hotels.get_one_or_none(id=room.hotel_id)
