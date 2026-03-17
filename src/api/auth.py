@@ -1,8 +1,6 @@
-from fastapi import APIRouter, HTTPException, Response, Request
+from fastapi import APIRouter, HTTPException, Response
 
 from src.api.dependencies import UserIdDep, DBDep
-from src.repositories.users import UsersRepository
-from src.database import async_session_maker
 from src.schemas.users import UserRequestAdd, UserAdd
 from src.services.auth import AuthService
 
@@ -12,21 +10,24 @@ router = APIRouter(prefix="/auth", tags=["Авторизация и аутент
 @router.post("/register")
 async def register_user(
         data: UserRequestAdd,
+        db: DBDep,
 ):
-    hashed_password = AuthService().hash_password(data.password)
-    new_user_data = UserAdd(email=data.email, hashed_password=hashed_password)
-    async with async_session_maker() as session:
-        await UsersRepository(session).add(new_user_data)
-        await session.commit()
+    try:
+        hashed_password = AuthService().hash_password(data.password)
+        new_user_data = UserAdd(email=data.email, hashed_password=hashed_password)
+        await db.users.add(new_user_data)
+        await db.commit()
+    except:
+        raise HTTPException(status_code=400)
 
     return {"status": "OK"}
 
 
 @router.post("/login")
 async def login_user(
-        db: DBDep,
         data: UserRequestAdd,
         response: Response,
+        db: DBDep,
 ):
     user = await db.users.get_user_with_hashed_password(email=data.email)
     if not user:
@@ -38,12 +39,16 @@ async def login_user(
     return {"access_token": access_token}
 
 
-@router.get("/logout")
-async def logout_user(response: Response):
-    response.delete_cookie("access_token")
-
-
-@router.post("/me")
-async def get_me(db:DBDep, user_id: UserIdDep):
+@router.get("/me")
+async def get_me(
+        user_id: UserIdDep,
+        db: DBDep,
+):
     user = await db.users.get_one_or_none(id=user_id)
     return user
+
+
+@router.post("/logout")
+async def logout(response: Response):
+    response.delete_cookie("access_token")
+    return {"status": "OK"}
