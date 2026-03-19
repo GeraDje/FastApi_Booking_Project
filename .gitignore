@@ -5,3 +5,4 @@ env/
 .idea
 .env
 celerybeat-schedule.db
+.env-test
