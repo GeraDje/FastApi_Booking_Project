@@ -36,7 +36,7 @@ async def get_hotels(
 @cache(expire=10)
 async def get_hotel(hotel_id: int, db: DBDep):
     try:
-        return await db.hotels.get_one_or_none(id=hotel_id)
+        return await db.hotels.get_one(id=hotel_id)
     except ObjectNotFoundException:
         raise HotelNotFoundHTTPException
 

@@ -2,7 +2,6 @@ from datetime import date
 
 from sqlalchemy import select, func
 
-from src.exceptions import check_date_to_after_date_from
 from src.models.rooms import RoomsOrm
 from src.repositories.base import BaseRepository
 from src.models.hotels import HotelsOrm
