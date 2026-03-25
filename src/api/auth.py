@@ -1,3 +1,4 @@
+from debugpy.adapter import access_token
 from fastapi import APIRouter, HTTPException, Response
 
 from src.api.dependencies import UserIdDep, DBDep
@@ -13,13 +14,14 @@ async def register_user(
     data: UserRequestAdd,
     db: DBDep,
 ):
-    hashed_password = AuthService().hash_password(data.password)
-    new_user_data = UserAdd(email=data.email, hashed_password=hashed_password)
-    try:
-        await db.users.add(new_user_data)
-        await db.commit()
-    except ObjectAlreadyExistsException:
-        raise HTTPException(status_code=409, detail="Пользователь с такой почтой уже существует")
+    await AuthService(db).register_user(data)
+    # hashed_password = AuthService().hash_password(data.password)
+    # new_user_data = UserAdd(email=data.email, hashed_password=hashed_password)
+    # try:
+    #     await db.users.add(new_user_data)
+    #     await db.commit()
+    # except ObjectAlreadyExistsException:
+    #     raise HTTPException(status_code=409, detail="Пользователь с такой почтой уже существует")
 
     return {"status": "OK"}
 

@@ -29,6 +29,9 @@ class RedisManager:
     async def close(self):
         if self.redis:
             await self.redis.close()
+        logging.info(f" ❌Disсonnecting to Redis host: {self.host}, port:{self.port}")
+
+
 
 
 # Пример использования:

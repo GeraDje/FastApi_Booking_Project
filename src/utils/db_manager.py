@@ -52,7 +52,10 @@ class DatabaseConnector:
                 await conn.execute(text("SELECT 1"))
 
             self.connected = True
-            logging.info("✅ Database connected successfully")
+            logging.info(f"✅ Database connected successfully,"
+                         f" host: {settings.DB_HOST},"
+                         f" port: {settings.DB_PORT}, "
+                         f"db_name: {settings.DB_NAME}")
 
         except Exception as e:
             self.connected = False

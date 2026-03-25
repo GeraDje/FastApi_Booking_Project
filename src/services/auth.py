@@ -4,9 +4,12 @@ from passlib.context import CryptContext
 import jwt
 
 from src.config import settings
+from src.exceptions import ObjectAlreadyExistsException
+from src.schemas.users import UserRequestAdd, UserAdd
+from src.services.base import BaseService
 
 
-class AuthService:
+class AuthService(BaseService):
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     def create_access_token(self, data: dict) -> str:
@@ -33,3 +36,14 @@ class AuthService:
             )
         except jwt.exceptions.DecodeError:
             raise HTTPException(status_code=401, detail="Неверный токен")
+
+    async def register_user(self,
+                         data: UserRequestAdd,
+                         ):
+        hashed_password = AuthService().hash_password(data.password)
+        new_user_data = UserAdd(email=data.email, hashed_password=hashed_password)
+        try:
+            await self.db.users.add(new_user_data)
+            await self.db.commit()
+        except ObjectAlreadyExistsException:
+            raise HTTPException(status_code=409, detail="Пользователь с такой почтой уже существует") #переделать ошибку(отвязать от fastapi

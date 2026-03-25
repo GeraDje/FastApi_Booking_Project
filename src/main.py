@@ -33,8 +33,8 @@ async def lifespan(app: FastAPI):
     logging.info("✅ FastApiCache initialized cache")
     await db_manager.connect()
     yield
-    await redis_manager.close()
     # Закрываем при остановке
+    await redis_manager.close()
     await db_manager.close()
 
 
@@ -61,3 +61,6 @@ async def custom_swagger_ui_html():
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
+
+
+
