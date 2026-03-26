@@ -21,6 +21,11 @@ class ObjectAlreadyExistsException(NabronirovalException):
 class AllRoomsAreBookedException(NabronirovalException):
     detail = "Не осталось свободных номеров"
 
+class RoomNotFoundException(ObjectNotFoundException):
+    detail = "Номер не найден"
+
+class HotelNotFoundException(ObjectNotFoundException):
+    detail = "Отель не найден"
 
 def check_date_to_after_date_from(date_from: date, date_to: date) -> None:
     if date_to <= date_from:
