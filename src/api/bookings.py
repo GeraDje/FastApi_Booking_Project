@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 
 from src.api.dependencies import DBDep, UserIdDep
-from src.exceptions import ObjectNotFoundException, AllRoomsAreBookedException, RoomNotFoundHTTPException
+from src.exceptions import ObjectNotFoundException, AllRoomsAreBookedException, RoomNotFoundHTTPException, \
+    AllRoomsAreBookedHTTPException
 from src.schemas.bookings import BookingAddRequest, BookingAdd
 from src.schemas.hotels import Hotel
 from src.schemas.rooms import Room
@@ -30,6 +31,6 @@ async def add_booking(
     try:
         booking = await BookingsService(db).add_booking(user_id, booking_data)
     except AllRoomsAreBookedException:
-        raise AllRoomsAreBookedException()
+        raise AllRoomsAreBookedHTTPException()
 
     return {"status": "OK", "data": booking}

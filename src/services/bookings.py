@@ -8,7 +8,7 @@ from src.services.base import BaseService
 class BookingsService(BaseService):
     async def add_booking(self, user_id:int, booking_data: BookingAddRequest):
         try:
-            room: Room = await self.db.rooms.get_or_none(id=booking_data.room_id)
+            room: Room = await self.db.rooms.get_one_or_none(id=booking_data.room_id)
         except ObjectNotFoundException as ex:
             raise RoomNotFoundHTTPException from ex
         hotel: Hotel = await self.db.rooms.get_one(id=room.hotel_id)
@@ -19,7 +19,7 @@ class BookingsService(BaseService):
             **booking_data.model_dump()
         )
         booking = await self.db.bookings.add_booking(_booking_data, hotel_id=hotel.id)
-        await self.db.bookings.commit()
+        await self.db.commit()
         return booking
 
     async def get_bookings(self):
