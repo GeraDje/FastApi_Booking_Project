@@ -9,6 +9,7 @@ from src.services.hotels import HotelService
 
 
 class RoomService(BaseService):
+
     async def get_filtered_by_time(self,
                                    hotel_id: int,
                                    date_from: date,

@@ -59,7 +59,10 @@ class DatabaseConnector:
 
         except Exception as e:
             self.connected = False
-            logging.error(f"❌ Database connection failed: {e}")
+            logging.error(f"❌ Database connection failed: {e},"
+                          f" host: {settings.DB_HOST},"
+                          f" port: {settings.DB_PORT}, "
+                          f"db_name: {settings.DB_NAME}")
             raise
 
     async def close(self):
