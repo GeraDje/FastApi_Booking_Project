@@ -7,3 +7,6 @@ env/
 celerybeat-schedule.db
 .env-test
 Zametki
+__pycache__
+.env
+celerybeat-schedule.db
