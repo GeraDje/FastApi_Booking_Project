@@ -1,5 +1,4 @@
-git config  user.name "Георгий"
-git config  user.email "itgerajob@gmail.com"
+
 
 
 
@@ -39,3 +38,8 @@ docker run --name booking_celery_beat \
     booking_image \
     celery --app=src.tasks.celery_app:celery_instance worker -l INFO -B
 
+
+docker run --name booking_nginx \
+    --volume ./nginx.conf:/etc/nginx/nginx.conf \
+    --network=myNetwork \
+    --rm -p 80:80 nginx
