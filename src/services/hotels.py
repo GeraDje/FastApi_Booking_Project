@@ -1,8 +1,7 @@
 from datetime import date
 
-from sqlalchemy.orm.attributes import HasCollectionAdapter
-
-from src.exceptions import check_date_to_after_date_from, ObjectNotFoundException, HotelNotFoundException
+from src.exceptions import check_date_to_after_date_from, ObjectNotFoundException, HotelNotFoundException, \
+    HotelFoundException
 from src.schemas.hotels import HotelAdd, HotelPatch
 from src.services.base import BaseService
 

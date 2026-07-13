@@ -21,6 +21,8 @@ class RoomNotFoundException(NabronirovalException):
 class HotelNotFoundException(NabronirovalException):
     detail = "Отель не найден"
 
+class HotelFoundException(NabronirovalException):
+    detail = "Данный отель уже добавлен"
 
 class ObjectAlreadyExistsException(NabronirovalException):
     detail = "Похожий объект уже существует"
@@ -63,6 +65,9 @@ class HotelNotFoundHTTPException(NabronirovalHTTPException):
     status_code = 404
     detail = "Отель не найден"
 
+class HotelFoundHTTPException(NabronirovalHTTPException):
+    status_code = 409
+    detail = "Данный отель уже добавлен"
 
 class RoomNotFoundHTTPException(NabronirovalHTTPException):
     status_code = 404
