@@ -4,7 +4,8 @@ from fastapi import Query, APIRouter, Body
 from fastapi_cache.decorator import cache
 
 from src.api.dependencies import PaginationDep, DBDep
-from src.exceptions import ObjectNotFoundException, HotelNotFoundHTTPException
+from src.exceptions import ObjectNotFoundException, HotelNotFoundHTTPException, HotelFoundHTTPException, \
+    HotelFoundException, ObjectAlreadyExistsException
 from src.schemas.hotels import HotelPatch, HotelAdd
 from src.services.hotels import HotelService
 
@@ -18,8 +19,8 @@ async def get_hotels(
     db: DBDep,
     location: str | None = Query(None, description="Локация"),
     title: str | None = Query(None, description="Название отеля"),
-    date_from: date = Query(example="2024-08-01"),
-    date_to: date = Query(example="2024-08-10"),
+    date_from: date = Query(example="2026-06-30"),
+    date_to: date = Query(example="2026-07-10"),
 ):
     return await HotelService(db).get_filtered_by_time(
         pagination,
@@ -38,7 +39,8 @@ async def get_hotel(hotel_id: int, db: DBDep):
         raise HotelNotFoundHTTPException
 
 
-@router.post("")
+@router.post("",
+    summary="Создание данных об отеле",)
 async def create_hotel(
     db: DBDep,
     hotel_data: HotelAdd = Body(
@@ -60,11 +62,15 @@ async def create_hotel(
         }
     ),
 ):
-    hotel = await HotelService(db).add_hotel(hotel_data)
+    try:
+        hotel = await HotelService(db).add_hotel(hotel_data)
+    except HotelFoundException:
+        raise HotelFoundHTTPException
     return {"status": "OK", "data": hotel}
 
 
-@router.put("/{hotel_id}")
+@router.put("/{hotel_id}",
+    summary="Полное обновление данных об отеле",)
 async def edit_hotel(hotel_id: int, hotel_data: HotelAdd, db: DBDep):
     await HotelService(db).edit_hotel(hotel_id, hotel_data)
     return {"status": "OK"}
@@ -84,7 +90,8 @@ async def partially_edit_hotel(
     return {"status": "OK"}
 
 
-@router.delete("/{hotel_id}")
+@router.delete("/{hotel_id}",
+    summary="Удаление данных об отеле",)
 async def delete_hotel(hotel_id: int, db: DBDep):
     await HotelService(db).delete_hotel(hotel_id)
     return {"status": "OK"}
