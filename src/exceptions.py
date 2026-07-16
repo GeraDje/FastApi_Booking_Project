@@ -21,6 +21,9 @@ class RoomNotFoundException(NabronirovalException):
 class HotelNotFoundException(NabronirovalException):
     detail = "Отель не найден"
 
+class FacilitiesNotFoundException(NabronirovalException):
+    detail = "Введенные удобства не найдены"
+
 class HotelFoundException(NabronirovalException):
     detail = "Данный отель уже добавлен"
 
@@ -73,6 +76,9 @@ class RoomNotFoundHTTPException(NabronirovalHTTPException):
     status_code = 404
     detail = "Номер не найден"
 
+class FacilitiesNotFoundHTTPException(NabronirovalHTTPException):
+    status_code = 400
+    detail = "Введеные удоства не найдены"
 
 class AllRoomsAreBookedHTTPException(NabronirovalHTTPException):
     status_code = 409

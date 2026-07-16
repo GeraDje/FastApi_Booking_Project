@@ -4,7 +4,8 @@ from fastapi import APIRouter, Body, Query
 
 from src.api.dependencies import DBDep
 from src.exceptions import HotelNotFoundHTTPException, \
-    RoomNotFoundHTTPException, RoomNotFoundException, HotelNotFoundException
+    RoomNotFoundHTTPException, RoomNotFoundException, HotelNotFoundException, FacilitiesNotFoundException, \
+    FacilitiesNotFoundHTTPException
 from src.schemas.rooms import RoomAddRequest, RoomPatchRequest
 from src.services.rooms import RoomService
 
@@ -36,6 +37,8 @@ async def create_room(hotel_id: int, db: DBDep, room_data: RoomAddRequest = Body
         room = await RoomService(db).create_room(hotel_id, room_data)
     except HotelNotFoundException:
         raise HotelNotFoundHTTPException
+    except FacilitiesNotFoundException:
+        raise FacilitiesNotFoundHTTPException
     return {"status": "OK", "data": room}
 
 
