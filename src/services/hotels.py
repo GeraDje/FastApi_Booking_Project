@@ -1,7 +1,7 @@
 from datetime import date
 
 from src.exceptions import check_date_to_after_date_from, ObjectNotFoundException, HotelNotFoundException, \
-    HotelFoundException, ObjectAlreadyExistsException
+    HotelFoundException, ObjectAlreadyExistsException, ObjectIsReferencedException, HotelHasBookingsException
 from src.schemas.hotels import HotelAdd, HotelPatch
 from src.services.base import BaseService
 
@@ -46,8 +46,11 @@ class HotelService(BaseService):
         await self.db.commit()
 
     async def delete_hotel(self, hotel_id: int):
-        await self.db.hotels.delete(id=hotel_id)
-        await self.db.commit()
+        try:
+            await self.db.hotels.delete(id=hotel_id)
+            await self.db.commit()
+        except ObjectIsReferencedException:
+            raise HotelHasBookingsException
 
     async def get_hotel_with_check(self, hotel_id: int):
         try:
