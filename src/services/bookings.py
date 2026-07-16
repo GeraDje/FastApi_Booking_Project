@@ -1,22 +1,22 @@
-from src.exceptions import ObjectNotFoundException, RoomNotFoundHTTPException
+from src.exceptions import ObjectNotFoundException, RoomNotFoundHTTPException, RoomNotFoundException
 from src.schemas.bookings import BookingAddRequest, BookingAdd
 from src.schemas.hotels import Hotel
 from src.schemas.rooms import Room
 from src.services.base import BaseService
 
 
-class BookingsService(BaseService):
-    async def add_booking(self, user_id:int, booking_data: BookingAddRequest):
+class BookingService(BaseService):
+    async def add_booking(self, user_id: int, booking_data: BookingAddRequest):
         try:
-            room: Room = await self.db.rooms.get_one_or_none(id=booking_data.room_id)
+            room: Room = await self.db.rooms.get_one(id=booking_data.room_id)
         except ObjectNotFoundException as ex:
-            raise RoomNotFoundHTTPException from ex
-        hotel: Hotel = await self.db.rooms.get_one(id=room.hotel_id)
-        room_price = room.price
+            raise RoomNotFoundException from ex
+        hotel: Hotel = await self.db.hotels.get_one(id=room.hotel_id)
+        room_price: int = room.price
         _booking_data = BookingAdd(
             user_id=user_id,
             price=room_price,
-            **booking_data.model_dump()
+            **booking_data.dict(),
         )
         booking = await self.db.bookings.add_booking(_booking_data, hotel_id=hotel.id)
         await self.db.commit()
