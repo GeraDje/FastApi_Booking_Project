@@ -13,6 +13,14 @@ class NabronirovalException(Exception):
 class ObjectNotFoundException(NabronirovalException):
     detail = "Объект не найден"
 
+class ObjectIsReferencedException(NabronirovalException):
+    detail = "Невозможно удалить объект: на него ссылаются другие записи"
+
+class RoomHasBookingsException(NabronirovalException):
+    detail = "Невозможно удалить номер: на него есть активные бронирования"
+
+class HotelHasBookingsException(NabronirovalException):
+    detail = "Невозможно удалить отель: на его номера есть активные бронирования"
 
 class RoomNotFoundException(NabronirovalException):
     detail = "Номер не найден"
@@ -107,3 +115,11 @@ class IncorrectPasswordHTTPException(NabronirovalHTTPException):
 class NoAccessTokenHTTPException(NabronirovalHTTPException):
     status_code = 401
     detail = "Вы не предоставили токен доступа"
+
+class RoomHasBookingsHTTPException(NabronirovalHTTPException):
+    status_code = 409
+    detail = "Невозможно удалить номер: на него есть активные бронирования"
+
+class HotelHasBookingsHTTPException(NabronirovalHTTPException):
+    status_code = 409
+    detail = "Невозможно удалить отель: на его номера есть активные бронирования"
