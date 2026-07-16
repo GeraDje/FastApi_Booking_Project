@@ -5,7 +5,7 @@ from fastapi import APIRouter, Body, Query
 from src.api.dependencies import DBDep
 from src.exceptions import HotelNotFoundHTTPException, \
     RoomNotFoundHTTPException, RoomNotFoundException, HotelNotFoundException, FacilitiesNotFoundException, \
-    FacilitiesNotFoundHTTPException, ObjectNotFoundException
+    FacilitiesNotFoundHTTPException, ObjectNotFoundException, RoomHasBookingsHTTPException, RoomHasBookingsException
 from src.schemas.rooms import RoomAddRequest, RoomPatchRequest
 from src.services.rooms import RoomService
 
@@ -67,5 +67,8 @@ async def partially_edit_room(
 
 @router.delete("/{hotel_id}/rooms/{room_id}")
 async def delete_room(hotel_id: int, room_id: int, db: DBDep):
-    await RoomService(db).delete_room(hotel_id, room_id)
-    return {"status": "OK"}
+    try:
+        await RoomService(db).delete_room(hotel_id, room_id)
+        return {"status": "OK"}
+    except RoomHasBookingsException:
+        raise RoomHasBookingsHTTPException

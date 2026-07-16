@@ -1,7 +1,7 @@
 from datetime import date
 
 from src.exceptions import check_date_to_after_date_from, ObjectNotFoundException, HotelNotFoundException, \
-    RoomNotFoundException, FacilitiesNotFoundException
+    RoomNotFoundException, FacilitiesNotFoundException, ObjectIsReferencedException, RoomHasBookingsException
 from src.schemas.facilities import RoomFacilityAdd
 from src.schemas.rooms import RoomAddRequest, Room, RoomAdd, RoomPatchRequest, RoomPatch
 from src.services.base import BaseService
@@ -84,8 +84,11 @@ class RoomService(BaseService):
     async def delete_room(self, hotel_id: int, room_id: int):
         await HotelService(self.db).get_hotel_with_check(hotel_id)
         await self.get_room_with_check(room_id)
-        await self.db.rooms.delete(id=room_id, hotel_id=hotel_id)
-        await self.db.commit()
+        try:
+            await self.db.rooms.delete(id=room_id, hotel_id=hotel_id)
+            await self.db.commit()
+        except ObjectIsReferencedException:
+            raise RoomHasBookingsException
 
     async def get_room_with_check(self, room_id: int) -> Room:
         try:
