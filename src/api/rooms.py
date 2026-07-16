@@ -5,7 +5,7 @@ from fastapi import APIRouter, Body, Query
 from src.api.dependencies import DBDep
 from src.exceptions import HotelNotFoundHTTPException, \
     RoomNotFoundHTTPException, RoomNotFoundException, HotelNotFoundException, FacilitiesNotFoundException, \
-    FacilitiesNotFoundHTTPException
+    FacilitiesNotFoundHTTPException, ObjectNotFoundException
 from src.schemas.rooms import RoomAddRequest, RoomPatchRequest
 from src.services.rooms import RoomService
 
@@ -19,8 +19,10 @@ async def get_rooms(
     date_from: date = Query(example="2024-08-01"),
     date_to: date = Query(example="2024-08-10"),
 ):
-    return await RoomService(db).get_filtered_by_time(hotel_id, date_from, date_to)
-
+    try:
+        return await RoomService(db).get_filtered_by_time(hotel_id, date_from, date_to)
+    except ObjectNotFoundException:
+        raise HotelNotFoundHTTPException
 
 @router.get("/{hotel_id}/rooms/{room_id}")
 async def get_room(hotel_id: int, room_id: int, db: DBDep):

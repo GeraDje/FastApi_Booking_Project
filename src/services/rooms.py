@@ -17,6 +17,7 @@ class RoomService(BaseService):
             date_to: date,
     ):
         check_date_to_after_date_from(date_from, date_to)
+        await self.db.hotels.get_one(id=hotel_id)
         return await self.db.rooms.get_filtered_by_time(
             hotel_id=hotel_id, date_from=date_from, date_to=date_to
         )
