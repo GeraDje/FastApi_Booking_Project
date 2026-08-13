@@ -1,7 +1,3 @@
-
-
-
-
 docker network create myNetwork
 
 docker run --name booking_db \
@@ -52,3 +48,9 @@ docker run --name booking_nginx \
     --volume /var/lib/letsencrypt:/var/lib/letsencrypt \
     --network=myNetwork \
     --rm -p 443:443 -p 80:80 nginx
+
+
+docker run -d --name gitlab-runner --restart always \
+  -v /srv/gitlab-runner/config:/etc/gitlab-runner \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  gitlab/gitlab-runner:alpine
