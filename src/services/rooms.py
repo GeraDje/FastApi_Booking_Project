@@ -12,7 +12,6 @@ from src.exceptions import (
 from src.schemas.facilities import RoomFacilityAdd
 from src.schemas.rooms import RoomAddRequest, Room, RoomAdd, RoomPatchRequest, RoomPatch
 from src.services.base import BaseService
-from src.services.facilities import FacilityService
 from src.services.hotels import HotelService
 
 
