@@ -25,9 +25,5 @@ class BookingService(BaseService):
     async def get_bookings(self):
         return await self.db.bookings.get_all()
 
-    async def get_my_bookings(self, user_id:int):
+    async def get_my_bookings(self, user_id: int):
         return await self.db.bookings.get_filtered(user_id=user_id)
-
-
-
-

@@ -13,14 +13,18 @@ class NabronirovalException(Exception):
 class ObjectNotFoundException(NabronirovalException):
     detail = "Объект не найден"
 
+
 class ObjectIsReferencedException(NabronirovalException):
     detail = "Невозможно удалить объект: на него ссылаются другие записи"
+
 
 class RoomHasBookingsException(NabronirovalException):
     detail = "Невозможно удалить номер: на него есть активные бронирования"
 
+
 class HotelHasBookingsException(NabronirovalException):
     detail = "Невозможно удалить отель: на его номера есть активные бронирования"
+
 
 class RoomNotFoundException(NabronirovalException):
     detail = "Номер не найден"
@@ -29,11 +33,14 @@ class RoomNotFoundException(NabronirovalException):
 class HotelNotFoundException(NabronirovalException):
     detail = "Отель не найден"
 
+
 class FacilitiesNotFoundException(NabronirovalException):
     detail = "Введенные удобства не найдены"
 
+
 class HotelFoundException(NabronirovalException):
     detail = "Данный отель уже добавлен"
+
 
 class ObjectAlreadyExistsException(NabronirovalException):
     detail = "Похожий объект уже существует"
@@ -61,7 +68,9 @@ class UserAlreadyExistsException(NabronirovalException):
 
 def check_date_to_after_date_from(date_from: date, date_to: date) -> None:
     if date_to <= date_from:
-        raise HTTPException(status_code=422, detail="Дата заезда не может быть позже даты выезда")
+        raise HTTPException(
+            status_code=422, detail="Дата заезда не может быть позже даты выезда"
+        )
 
 
 class NabronirovalHTTPException(HTTPException):
@@ -76,17 +85,21 @@ class HotelNotFoundHTTPException(NabronirovalHTTPException):
     status_code = 404
     detail = "Отель не найден"
 
+
 class HotelFoundHTTPException(NabronirovalHTTPException):
     status_code = 409
     detail = "Данный отель уже добавлен"
+
 
 class RoomNotFoundHTTPException(NabronirovalHTTPException):
     status_code = 404
     detail = "Номер не найден"
 
+
 class FacilitiesNotFoundHTTPException(NabronirovalHTTPException):
     status_code = 400
     detail = "Введеные удоства не найдены"
+
 
 class AllRoomsAreBookedHTTPException(NabronirovalHTTPException):
     status_code = 409
@@ -116,9 +129,11 @@ class NoAccessTokenHTTPException(NabronirovalHTTPException):
     status_code = 401
     detail = "Вы не предоставили токен доступа"
 
+
 class RoomHasBookingsHTTPException(NabronirovalHTTPException):
     status_code = 409
     detail = "Невозможно удалить номер: на него есть активные бронирования"
+
 
 class HotelHasBookingsHTTPException(NabronirovalHTTPException):
     status_code = 409

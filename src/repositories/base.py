@@ -4,7 +4,11 @@ from sqlalchemy import select, insert, update, delete
 from pydantic import BaseModel
 from sqlalchemy.exc import NoResultFound, IntegrityError
 
-from src.exceptions import ObjectNotFoundException, ObjectAlreadyExistsException,ObjectIsReferencedException
+from src.exceptions import (
+    ObjectNotFoundException,
+    ObjectAlreadyExistsException,
+    ObjectIsReferencedException,
+)
 from src.repositories.mappers.base import DataMapper
 
 
@@ -51,11 +55,15 @@ class BaseRepository:
             model = result.scalars().one()
             return self.mapper.map_to_domain_entity(model)
         except IntegrityError as ex:
-            logging.error(f"Не удалось добавить данные в БД, данные = {data}, тип ошибки {type(ex.orig.__cause__)=}")
+            logging.error(
+                f"Не удалось добавить данные в БД, данные = {data}, тип ошибки {type(ex.orig.__cause__)=}"
+            )
             if isinstance(ex.orig.__cause__, UniqueViolationError):
                 raise ObjectAlreadyExistsException from ex
             else:
-                logging.error(f"Не знакомая ошибка, тип ошибки {type(ex.orig.__cause__)=}")
+                logging.error(
+                    f"Не знакомая ошибка, тип ошибки {type(ex.orig.__cause__)=}"
+                )
                 raise ex
 
     async def add_bulk(self, data: list[BaseModel]):
@@ -63,7 +71,7 @@ class BaseRepository:
         await self.session.execute(add_data_stmt)
 
     async def edit(
-            self, data: BaseModel, exclude_unset: bool = False, **filter_by
+        self, data: BaseModel, exclude_unset: bool = False, **filter_by
     ) -> None:
         update_stmt = (
             update(self.model)
@@ -77,9 +85,13 @@ class BaseRepository:
             delete_stmt = delete(self.model).filter_by(**filter_by)
             await self.session.execute(delete_stmt)
         except IntegrityError as ex:
-            logging.error(f"Не удалось удалить данные в БД, тип ошибки {type(ex.orig.__cause__)=}")
+            logging.error(
+                f"Не удалось удалить данные в БД, тип ошибки {type(ex.orig.__cause__)=}"
+            )
             if isinstance(ex.orig.__cause__, ForeignKeyViolationError):
                 raise ObjectIsReferencedException from ex
             else:
-                logging.error(f"Не знакомая ошибка, тип ошибки {type(ex.orig.__cause__)=}")
+                logging.error(
+                    f"Не знакомая ошибка, тип ошибки {type(ex.orig.__cause__)=}"
+                )
                 raise ex

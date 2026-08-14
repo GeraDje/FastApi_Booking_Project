@@ -1,9 +1,7 @@
 from src.services.auth import AuthService
 
 
-
-class TestAuthService():
-
+class TestAuthService:
     def test_create_access_token(self):
         data = {"user_id": 1}
         jwt_token = AuthService().create_access_token(data)

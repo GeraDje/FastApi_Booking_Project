@@ -34,7 +34,6 @@ class DBManager:
 
 
 class DatabaseConnector:
-
     def __init__(self):
         self.engine = None
         self.connected = False
@@ -52,17 +51,21 @@ class DatabaseConnector:
                 await conn.execute(text("SELECT 1"))
 
             self.connected = True
-            logging.info(f"✅ Database connected successfully,"
-                         f" host: {settings.DB_HOST},"
-                         f" port: {settings.DB_PORT}, "
-                         f"db_name: {settings.DB_NAME}")
+            logging.info(
+                f"✅ Database connected successfully,"
+                f" host: {settings.DB_HOST},"
+                f" port: {settings.DB_PORT}, "
+                f"db_name: {settings.DB_NAME}"
+            )
 
         except Exception as e:
             self.connected = False
-            logging.error(f"❌ Database connection failed: {e},"
-                          f" host: {settings.DB_HOST},"
-                          f" port: {settings.DB_PORT}, "
-                          f"db_name: {settings.DB_NAME}")
+            logging.error(
+                f"❌ Database connection failed: {e},"
+                f" host: {settings.DB_HOST},"
+                f" port: {settings.DB_PORT}, "
+                f"db_name: {settings.DB_NAME}"
+            )
             raise
 
     async def close(self):

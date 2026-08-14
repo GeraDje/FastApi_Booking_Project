@@ -7,11 +7,10 @@ from src.database import Base
 class HotelsOrm(Base):
     __tablename__ = "hotels"
 
-
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(100))
     location: Mapped[str]
 
     __table_args__ = (
-        UniqueConstraint('title', 'location', name='uq_hotel_title_location'),
+        UniqueConstraint("title", "location", name="uq_hotel_title_location"),
     )
