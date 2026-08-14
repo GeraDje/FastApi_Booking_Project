@@ -1,4 +1,4 @@
-from src.exceptions import ObjectNotFoundException, RoomNotFoundHTTPException, RoomNotFoundException
+from src.exceptions import ObjectNotFoundException, RoomNotFoundException
 from src.schemas.bookings import BookingAddRequest, BookingAdd
 from src.schemas.hotels import Hotel
 from src.schemas.rooms import Room

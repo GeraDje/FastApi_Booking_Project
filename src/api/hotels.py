@@ -5,7 +5,7 @@ from fastapi_cache.decorator import cache
 
 from src.api.dependencies import PaginationDep, DBDep
 from src.exceptions import ObjectNotFoundException, HotelNotFoundHTTPException, HotelFoundHTTPException, \
-    HotelFoundException, ObjectAlreadyExistsException, HotelHasBookingsException, HotelHasBookingsHTTPException
+    HotelFoundException, HotelHasBookingsException, HotelHasBookingsHTTPException
 from src.schemas.hotels import HotelPatch, HotelAdd
 from src.services.hotels import HotelService
 

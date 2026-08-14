@@ -1,10 +1,10 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, Response
 
 from src.api.dependencies import UserIdDep, DBDep
-from src.exceptions import ObjectAlreadyExistsException, IncorrectPasswordHTTPException, IncorrectPasswordException, \
+from src.exceptions import IncorrectPasswordHTTPException, IncorrectPasswordException, \
     EmailNotRegisteredHTTPException, EmailNotRegisteredException, UserAlreadyExistsException, \
     UserEmailAlreadyExistsHTTPException
-from src.schemas.users import UserRequestAdd, UserAdd
+from src.schemas.users import UserRequestAdd
 from src.services.auth import AuthService
 
 router = APIRouter(prefix="/auth", tags=["Авторизация и аутентификация"])
